@@ -1,0 +1,51 @@
+name: Carmel Judgment Protocol 😼
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  judgment:
+    name: Carmel Reviews the Offering
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests
+        id: tests
+        run: npm run test:run
+
+      - name: 😼 Carmel Judgment Stamp
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const passed = ${{ steps.tests.outcome === 'success' }};
+            const body = passed
+              ? "😼✨ **Carmel Approval Stamp™**\n\n> *Adequate work, human.*"
+              : "😼🔥 **Carmel Chaos Stamp™**\n\n> *I sense weakness in these tests.*";
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
+
+            if (!passed) {
+              core.setFailed("Carmel has rejected this PR.");
+            }
+
+      - name: 😼 Carmel Observes the Results
+        run: echo "Verdict delivered."
