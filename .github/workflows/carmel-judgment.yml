@@ -29,9 +29,12 @@ jobs:
       - name: 😼 Carmel Judgment Stamp
         if: always()
         uses: actions/github-script@v7
+        env:
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
         with:
           script: |
-            const passed = ${{ steps.tests.outcome === 'success' }};
+            const passed = process.env.TESTS_OUTCOME === "success";
+
             const body = passed
               ? "😼✨ **Carmel Approval Stamp™**\n\n> *Adequate work, human.*"
               : "😼🔥 **Carmel Chaos Stamp™**\n\n> *I sense weakness in these tests.*";
@@ -43,9 +46,4 @@ jobs:
               body
             });
 
-            if (!passed) {
-              core.setFailed("Carmel has rejected this PR.");
-            }
-
-      - name: 😼 Carmel Observes the Results
-        run: echo "Verdict delivered."
+            if (!passed) core.setFailed("Carmel has rejected this PR.");
