@@ -20,10 +20,23 @@ const FrontmatterSchema = z.object({
     slug: z.string().optional()
 });
 
+export type NoteAttributes = {
+    title: string;
+    subtitle?: string;
+    published?: string;
+    tags?: string[];
+    summary?: string;
+    readingTime?: number;
+    status?: "published" | "draft" | "archived";
+    dept?: string;
+    // add more frontmatter fields as needed
+    [key: string]: unknown; // allows extra frontmatter keys without breaking
+};
+
 export type NotePayload = {
     slug: string;
     locale: string;
-    attributes: Record<string, unknown>;
+    attributes: NoteAttributes;
     markdown: string;
 };
 
@@ -38,18 +51,23 @@ export function readNote(filePath: string, locale: string): NotePayload {
 
     const fm = FrontmatterSchema.parse(parsed.data ?? {});
     const slug = (fm.slug && String(fm.slug).trim()) || slugFromFilename(filePath);
-
+    const body = parsed.content.trim();
+    const markdown = body.length > 0 ? body : raw.trim();
     // Keep full attributes, but ensure key stuff exists
-    const attributes = {
-        ...fm,
-        slug
-    };
+    const title = (fm.title && String(fm.title).trim()) || "";
 
+    if (!title) {
+        throw new Error(`Missing required frontmatter: title (${filePath})`);
+    }
+
+    if (!markdown) {
+        throw new Error(`Missing required markdown content (${filePath})`);
+    }
     return {
         slug,
         locale,
-        attributes,
-        markdown: parsed.content.trim()
+        attributes: { ...fm, slug },
+        markdown
     };
 }
 

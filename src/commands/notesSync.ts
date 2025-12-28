@@ -35,7 +35,8 @@ import { Command } from "commander";
 import { resolveApiBaseUrl, resolveToken } from "../lib/config.js";
 import { httpJson } from "../lib/http.js";
 import { listMarkdownFiles, readNote, type NotePayload } from "../lib/notes.js";
-import { getOutputMode, printJson } from "../lib/output.js";
+import { getOutputMode, printJson } from "../cli/output.js";
+import { buildSyncReport } from "../cli/outputContract.js";
 import fs from "node:fs";
 
 
@@ -45,14 +46,36 @@ type UpsertResponse = {
     action?: "created" | "updated";
 };
 
-async function upsertNote(baseUrl: string, token: string | undefined, note: NotePayload) {
-    // Adjust this to match your API.
-    // Recommended: POST /api/lab-notes/upsert  OR POST /api/lab-notes (upsert by slug)
+type LabNoteUpsertPayload = {
+    slug: string;
+    title: string;
+    markdown: string;
+    locale?: string;
+    // optional extras if your API supports them:
+    // subtitle?: string;
+    // tags?: string[];
+    // published?: string;
+    // status?: string;
+    // dept?: string;
+};
+
+async function upsertNote(baseUrl: string, token: string | undefined, note: any, locale?: string) {
+    const payload: LabNoteUpsertPayload = {
+        slug: note.slug,
+        title: note.attributes.title,
+        markdown: note.markdown,
+        locale
+    };
+    if (!payload.slug || !payload.title || !payload.markdown) {
+        throw new Error(
+            `Invalid note payload: slug/title/markdown missing for ${payload.slug ?? "unknown"}`
+        );
+    }
     return httpJson<UpsertResponse>(
         { baseUrl, token },
         "POST",
-        "/lab-notes",
-        note
+        "/lab-notes/upsert",
+        payload
     );
 }
 
@@ -156,7 +179,7 @@ export function notesSyncCommand() {
                         continue;
                     }
 
-                    const res = await upsertNote(baseUrl, token, note);
+                    const res = await upsertNote(baseUrl, token, note, opts.locale);
                     ok++;
 
                     results.push({
@@ -187,23 +210,38 @@ export function notesSyncCommand() {
             }
 
             if (mode === "json") {
-                printJson({
-                    ok: fail === 0,
-                    summary: {
-                        success: ok,
-                        failed: fail,
-                        total: ok + fail,
-                        dryRun: Boolean(opts.dryRun),
-                        locale: opts.locale,
-                        baseUrl
-                    },
-                    results
+                const report = buildSyncReport({
+                    results,
+                    dryRun: Boolean(opts.dryRun),
+                    locale: opts.locale,
+                    baseUrl,
                 });
-            } else {
-                console.log(`\nDone. Success: ${ok}, Failed: ${fail}`);
-            }
 
-            if (fail > 0) process.exitCode = 1;
+                printJson(report);
+
+                if (!report.ok) process.exitCode = 1;
+            } else {
+                const report = buildSyncReport({
+                    results,
+                    dryRun: Boolean(opts.dryRun),
+                    locale: opts.locale,
+                    baseUrl,
+                });
+
+                const { synced, dryRun, failed } = report.summary;
+
+                if (report.dryRun) {
+                    console.log(
+                        `\nDone. ${dryRun} note(s) would be synced (dry-run). Failures: ${failed}`
+                    );
+                } else {
+                    console.log(
+                        `\nDone. ${synced} note(s) synced successfully. Failures: ${failed}`
+                    );
+                }
+
+                if (!report.ok) process.exitCode = 1;
+            }
         });
 
 
