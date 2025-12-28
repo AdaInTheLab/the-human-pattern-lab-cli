@@ -33,7 +33,7 @@ jobs:
           TESTS_OUTCOME: ${{ steps.tests.outcome }}
         with:
           script: |
-            const passed = process.env.TESTS_OUTCOME === "success";
+            const passed = process.env.TESTS_OUTCOME == "success";
 
             const body = passed
               ? "😼✨ **Carmel Approval Stamp™**\n\n> *Adequate work, human.*"
