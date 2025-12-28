@@ -1,5 +1,5 @@
 {
-  "name": "@humanpatternlab/skulk",
+  "name": "@thehumanpatternlab/skulk",
   "version": "0.1.0",
   "private": false,
   "description": "CLI for syncing Lab Notes with The Human Pattern Lab API",
@@ -11,7 +11,14 @@
     "skulk": "dist/index.js"
   },
   "files": [
-    "dist"
+    "dist/index.js",
+    "dist/lab.js",
+    "dist/cli/**",
+    "dist/commands/**",
+    "dist/lib/**",
+    "dist/sdk/**",
+    "dist/sync/**",
+    "dist/utils/**"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
