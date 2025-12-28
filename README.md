@@ -16,6 +16,15 @@
 Skulk is a command-line tool for syncing and managing Lab Notes — built to work just as well for humans at the keyboard as it does for automation, CI, and agent-driven workflows.
 
 ---
+## What Skulk Connects To
+
+Skulk is the CLI for **The Human Pattern Lab API**.
+
+By default it targets a Human Pattern Lab API instance. You can override the API endpoint with `--base-url` to use staging or a self-hosted deployment of the same API.
+
+> Note: `--base-url` is intended for alternate deployments of the Human Pattern Lab API, not arbitrary third-party APIs.
+
+---
 
 ## Why Skulk Exists
 
