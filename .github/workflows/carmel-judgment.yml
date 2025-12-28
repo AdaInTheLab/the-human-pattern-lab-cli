@@ -49,4 +49,4 @@ jobs:
             if (!passed) core.setFailed("Carmel has rejected this PR.");
 
       - name: 😼 Carmel Observes the Results
-        run: echo "Verdict delivered."
+        run: echo "Verdict delivered. "
