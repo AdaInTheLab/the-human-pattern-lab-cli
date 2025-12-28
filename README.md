@@ -7,7 +7,8 @@
 -->
 # Skulk CLI
 
-[![AI-Forward CLI](https://img.shields.io/badge/AI--Forward%20CLI-automation--safe%20by%20design-7c3aed?style=flat-square)](./DESIGN.md) ![Carmel Judgment](https://github.com/ada-vale/skulk/actions/workflows/carmel-judgment.yml/badge.svg)
+[![AI-Forward CLI](https://img.shields.io/badge/AI--Forward%20CLI-automation--safe%20by%20design-7c3aed?style=flat-square)](./DESIGN.md) ![Carmel Judgment](https://github.com/AdaInTheLab/the-human-pattern-lab-cli/actions/workflows/carmel-judgment.yml/badge.svg)
+
 
 
 > A modern, automation-safe CLI for The Human Pattern Lab.
