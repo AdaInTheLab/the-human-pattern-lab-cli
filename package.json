@@ -1,9 +1,13 @@
 {
   "name": "@thehumanpatternlab/skulk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "CLI for syncing Lab Notes with The Human Pattern Lab API",
-  "keywords": ["cli", "automation", "human-pattern-lab"],
+  "keywords": [
+    "cli",
+    "automation",
+    "human-pattern-lab"
+  ],
   "author": "Ada Vale",
   "license": "MIT",
   "type": "module",
