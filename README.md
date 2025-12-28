@@ -7,7 +7,7 @@
 -->
 # Skulk CLI
 
-[![AI-Forward CLI](https://img.shields.io/badge/AI-Forward%20CLI-designed%20for%20automation-7c3aed?style=flat-square)](./DESIGN.md)
+[![AI-Forward CLI](https://img.shields.io/badge/AI--Forward%20CLI-automation--safe%20by%20design-7c3aed?style=flat-square)](./DESIGN.md)
 
 > A modern, automation-safe CLI for The Human Pattern Lab.
 
