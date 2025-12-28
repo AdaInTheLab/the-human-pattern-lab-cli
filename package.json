@@ -1,12 +1,25 @@
 {
-  "name": "@humanpatternlab/skulk",
+  "name": "@thehumanpatternlab/skulk",
   "version": "0.1.0",
-  "private": true,
-  "description": "Skulk CLI for The Human Pattern Lab",
+  "private": false,
+  "description": "CLI for syncing Lab Notes with The Human Pattern Lab API",
+  "keywords": ["cli", "automation", "human-pattern-lab"],
+  "author": "Ada Vale",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "skulk": "dist/index.js"
   },
+  "files": [
+    "dist/index.js",
+    "dist/lab.js",
+    "dist/cli/**",
+    "dist/commands/**",
+    "dist/lib/**",
+    "dist/sdk/**",
+    "dist/sync/**",
+    "dist/utils/**"
+  ],
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
@@ -41,8 +54,5 @@
   },
   "lint-staged": {
     "*.{js,ts,md,json}": "prettier --write"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
