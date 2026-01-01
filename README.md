@@ -1,6 +1,11 @@
 # HPL CLI (Alpha) 🧭🦊
 
-[![Carmel Judgment Protocol 😼](https://github.com/AdaInTheLab/the-human-pattern-lab-cli/actions/workflows/carmel-judgment.yml/badge.svg)](https://github.com/AdaInTheLab/the-human-pattern-lab-cli/actions/workflows/carmel-judgment.yml)
+<span>
+  <img src="https://img.shields.io/badge/AI--Forward%20CLI-black?style=flat-square" />
+  <img src="https://img.shields.io/badge/automation--safe%20by%20design-8b5cf6?style=flat-square" />
+</span>
+ 
+ [![Carmel Judgment Protocol 😼](https://github.com/AdaInTheLab/the-human-pattern-lab-cli/actions/workflows/carmel-judgment.yml/badge.svg)](https://github.com/AdaInTheLab/the-human-pattern-lab-cli/actions/workflows/carmel-judgment.yml)
 
 Contract-first CLI for The Human Pattern Lab.
 

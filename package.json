@@ -1,10 +1,35 @@
 {
   "name": "@thehumanpatternlab/hpl",
-  "version": "0.0.1-alpha.0",
-  "private": true,
+  "version": "0.0.1-alpha.4",
+  "description": "AI-forward, automation-safe SDK and CLI for the Human Pattern Lab",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdaInTheLab/the-human-pattern-lab-cli.git"
+  },
+  "homepage": "https://github.com/AdaInTheLab/the-human-pattern-lab-cli#readme",
+  "bugs": {
+    "url": "https://github.com/AdaInTheLab/the-human-pattern-lab-cli/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
     "hpl": "./dist/bin/hpl.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
     "dev": "tsx ./bin/hpl.ts",
@@ -27,5 +52,19 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "human-pattern-lab",
+    "hpl",
+    "ai",
+    "ai-forward",
+    "automation",
+    "automation-safe",
+    "cli",
+    "sdk",
+    "developer-tools",
+    "observability",
+    "notes",
+    "knowledge-systems"
+  ]
 }
