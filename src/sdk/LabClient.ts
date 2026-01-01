@@ -16,9 +16,9 @@ export interface LabNote {
     excerpt?: string;
     department_id?: string;
 
-    content?: string; // markdown
+    content?: string; // markdown (or swap to content_html if that’s your truth)
     author?: string;
-    status: 'draft' | 'published' | 'archived';
+    status: "draft" | "published" | "archived";
 
     shadow_density: number;
     coherence_score: number;
@@ -43,7 +43,7 @@ export interface CreateOrUpdateNoteInput {
 
     content?: string;
     author?: string;
-    status?: 'draft' | 'published' | 'archived';
+    status?: "draft" | "published" | "archived";
 
     shadow_density?: number;
     coherence_score?: number;
@@ -57,12 +57,19 @@ export interface CreateOrUpdateNoteInput {
     artifacts?: Artifact[];
 }
 
+type RequestOpts = Omit<RequestInit, "headers"> & {
+    auth?: "bearer" | "cookie" | "none";
+    headers?: Record<string, string>;
+};
+
 export class LabClient {
     private baseUrl: string;
     private token?: string;
 
     constructor(baseUrl: string, token?: string) {
-        this.baseUrl = baseUrl.replace(/\/$/, '');
+        // baseUrl should be like: https://api.thehumanpatternlab.com
+        // (no trailing slash, no /api)
+        this.baseUrl = baseUrl.replace(/\/$/, "");
         this.token = token;
     }
 
@@ -70,14 +77,50 @@ export class LabClient {
         this.token = token;
     }
 
-    private headers() {
-        const h: Record<string, string> = {
-            'Content-Type': 'application/json'
-        };
-        if (this.token) {
-            h['Authorization'] = `Bearer ${this.token}`;
+    private buildHeaders(extra?: Record<string, string>, auth: RequestOpts["auth"] = "none") {
+        const h: Record<string, string> = { ...(extra ?? {}) };
+
+        // Only set JSON content-type when we actually send a JSON body
+        // (some servers get weird on GETs with Content-Type set)
+        if (!h["Content-Type"]) h["Content-Type"] = "application/json";
+
+        if (auth === "bearer" && this.token) {
+            h["Authorization"] = `Bearer ${this.token}`;
         }
+
         return h;
+    }
+
+    private async request<T>(path: string, opts: RequestOpts = {}): Promise<T> {
+        const url = `${this.baseUrl}${path.startsWith("/") ? "" : "/"}${path}`;
+
+        const auth = opts.auth ?? "none";
+        const headers = this.buildHeaders(opts.headers, auth);
+
+        const res = await fetch(url, {
+            ...opts,
+            headers,
+            credentials: auth === "cookie" ? "include" : opts.credentials,
+        });
+
+        // Best-effort parse
+        const payload: unknown = await res.json().catch(() => null);
+
+        if (!res.ok) {
+            const msg =
+                typeof payload === "object" &&
+                payload !== null &&
+                ("error" in payload || "message" in payload) &&
+                typeof (payload as any).error === "string"
+                    ? (payload as any).error
+                    : typeof (payload as any)?.message === "string"
+                        ? (payload as any).message
+                        : `Request failed (${res.status})`;
+
+            throw new Error(msg);
+        }
+
+        return payload as T;
     }
 
     //
@@ -86,22 +129,17 @@ export class LabClient {
     // ────────────────────────────────────────────────
     //
 
+    // ✅ was GET `${baseUrl}/`
     async getAllNotes(): Promise<LabNote[]> {
-        const res = await fetch(`${this.baseUrl}/`, {
-            method: 'GET',
-            headers: this.headers()
-        });
-        if (!res.ok) throw new Error('Failed to fetch notes');
-        return res.json();
+        return this.request<LabNote[]>("/lab-notes", { method: "GET", auth: "none" });
     }
 
+    // ✅ was GET `${baseUrl}/notes/${slug}`
     async getNoteBySlug(slug: string): Promise<LabNote> {
-        const res = await fetch(`${this.baseUrl}/notes/${slug}`, {
-            method: 'GET',
-            headers: this.headers()
+        return this.request<LabNote>(`/lab-notes/${encodeURIComponent(slug)}`, {
+            method: "GET",
+            auth: "none",
         });
-        if (!res.ok) throw new Error('Note not found');
-        return res.json();
     }
 
     //
@@ -110,41 +148,29 @@ export class LabClient {
     // ────────────────────────────────────────────────
     //
 
+    // ✅ was `/api/admin/notes`
     async getAdminNotes(): Promise<LabNote[]> {
-        const res = await fetch(`${this.baseUrl}/api/admin/notes`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: this.headers()
+        return this.request<LabNote[]>("/admin/notes", {
+            method: "GET",
+            auth: "cookie",
         });
-        if (!res.ok) throw new Error('Failed to fetch admin notes');
-        return res.json();
     }
 
+    // ✅ was `/api/admin/notes`
     async createOrUpdateNote(input: CreateOrUpdateNoteInput): Promise<{ message: string }> {
-        const res = await fetch(`${this.baseUrl}/api/admin/notes`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: this.headers(),
-            body: JSON.stringify(input)
+        return this.request<{ message: string }>("/admin/notes", {
+            method: "POST",
+            auth: "cookie",
+            body: JSON.stringify(input),
         });
-
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.error || 'Failed to save note');
-        }
-
-        return res.json();
     }
 
+    // ✅ was `/api/admin/notes/${id}`
     async deleteNote(id: string): Promise<{ message: string }> {
-        const res = await fetch(`${this.baseUrl}/api/admin/notes/${id}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: this.headers()
+        return this.request<{ message: string }>(`/admin/notes/${encodeURIComponent(id)}`, {
+            method: "DELETE",
+            auth: "cookie",
         });
-
-        if (!res.ok) throw new Error('Failed to delete note');
-        return res.json();
     }
 
     //
@@ -153,11 +179,8 @@ export class LabClient {
     // ────────────────────────────────────────────────
     //
 
+    // ✅ was `/api/health`
     async health(): Promise<any> {
-        const res = await fetch(`${this.baseUrl}/api/health`, {
-            method: 'GET',
-            headers: this.headers()
-        });
-        return res.json();
+        return this.request<any>("/health", { method: "GET", auth: "none" });
     }
 }

@@ -10,16 +10,20 @@
     "dev": "tsx ./bin/hpl.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node ./dist/bin/hpl.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "node -e \"console.log('lint: add eslint when ready')\""
   },
   "dependencies": {
     "commander": "^12.1.0",
+    "gray-matter": "^4.0.3",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.19.3",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.16"
   },
   "engines": {
     "node": ">=18"
