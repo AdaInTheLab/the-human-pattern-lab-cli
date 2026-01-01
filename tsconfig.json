@@ -12,5 +12,6 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]
   },
-  "include": ["src/**/*", "bin/**/*"]
+  "include": ["src/**/*.ts", "bin/**/*.ts"],
+  "exclude": ["src/**/__tests__/**"]
 }
