@@ -1,11 +1,12 @@
 <!--
-  DESIGN NOTES — SKULK CLI
+  DESIGN NOTES — HPL CLI
   The Human Pattern Lab
 
-  This document explains *why* Skulk behaves the way it does.
+  This document explains *why* HPL behaves the way it does.
   It is not required reading, but it is canonical.
 -->
-# Skulk CLI — Design Notes
+
+# HPL CLI — Design Notes
 
 > Looking for usage or setup?  
 > Go back to → [README.md](./README.md)
@@ -14,13 +15,13 @@
 
 ## Design Goals
 
-Skulk is designed to be:
+HPL is designed to be:
 - predictable
 - automation-safe
 - easy to reason about
 - boring in the right ways
 
-The goal is not cleverness.
+The goal is not cleverness.  
 The goal is trust.
 
 ---
@@ -34,15 +35,15 @@ It means building tools that:
 - communicate clearly
 - don’t require guesswork when automated
 
-As tooling increasingly interacts with agents and scripts, ambiguity becomes technical debt.
+As tooling increasingly interacts with agents, scripts, and orchestration layers, ambiguity becomes technical debt.
 
-Skulk treats that as a first-class concern.
+HPL treats that as a first-class concern.
 
 ---
 
 ## Output Is a Contract
 
-Skulk has two explicit output modes:
+HPL has two explicit output modes.
 
 ### Human Mode (default)
 - readable progress
@@ -55,6 +56,8 @@ Skulk has two explicit output modes:
 - errors are written to stderr
 - exit codes are deterministic
 
+This distinction is intentional and enforced.
+
 ---
 
 ## JSON Purity Enforcement
@@ -65,7 +68,7 @@ The project includes a hard verification step:
 npm run json:check
 ```
 
-This runs Skulk in JSON mode and pipes stdout directly into `JSON.parse`.
+This runs HPL in JSON mode and pipes stdout directly into `JSON.parse`.
 
 If *anything* other than valid JSON is emitted, the command fails immediately.
 
@@ -78,6 +81,8 @@ If *anything* other than valid JSON is emitted, the command fails immediately.
 - Output formatting happens at the command boundary
 - Exit codes reflect real success or failure
 
+This separation keeps behavior testable and contracts stable.
+
 ---
 
 ## Why This Matters
@@ -87,7 +92,7 @@ Most CLI bugs don’t come from broken logic — they come from:
 - mixed streams
 - silent contract changes
 
-Skulk is designed to avoid those classes of problems entirely.
+HPL is designed to avoid those classes of problems entirely.
 
 ---
 
@@ -95,6 +100,6 @@ Skulk is designed to avoid those classes of problems entirely.
 
 These constraints are intentional.
 
-They make Skulk easier to automate, easier to test, and easier to trust — now and later.
+They make HPL easier to automate, easier to test, and easier to trust — now and later.
 
 If a future change breaks these guarantees, it should break loudly.
