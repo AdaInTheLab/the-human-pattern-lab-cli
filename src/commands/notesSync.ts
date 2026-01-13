@@ -98,7 +98,7 @@ export function notesSyncCommand() {
     .option('--locale <code>', 'Locale code', 'en')
     .option(
       '--base-url <url>',
-      'Override API base URL (ex: https://thehumanpatternlab.com/api)',
+      'Override API base URL (ex: https://api.thehumanpatternlab.com)',
     )
     .option(
       '--dry-run',

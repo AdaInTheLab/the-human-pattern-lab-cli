@@ -9,7 +9,7 @@
 # HPL CLI — Design Notes
 
 > Looking for usage or setup?  
-> Go back to → [README.md](./README.md)
+> Go back to → [README.md](../README.md)
 
 ---
 
@@ -82,6 +82,24 @@ If *anything* other than valid JSON is emitted, the command fails immediately.
 - Exit codes reflect real success or failure
 
 This separation keeps behavior testable and contracts stable.
+
+---
+
+## Content Lives in a Dedicated Ledger Repo
+
+HPL treats written content as a **ledger**, not an application artifact.
+
+- Markdown lives in a dedicated content repository (source of truth)
+- The API syncs that ledger into a database (runtime index)
+- UIs render from the database, not from filesystem Markdown
+
+The canonical structure is:
+
+```text
+labnotes/<locale>/*.md
+```
+
+HPL consumes this repository directly or an equivalent local directory.
 
 ---
 

@@ -20,15 +20,21 @@
 
 Formerly developed under the codename **Skulk**, HPL is built to work just as well for humans at the keyboard as it does for automation, CI, and agent-driven workflows.
 
-This package is in **active alpha development**. Interfaces are stabilizing, but expect iteration.
+This package is in **active alpha development**. Interfaces are stabilizing, but iteration is expected.
 
 ---
 
 ## What HPL Connects To
 
-HPL is the CLI for the **Human Pattern Lab API**.
+HPL is a deterministic bridge between:
 
-By default, it targets a Human Pattern Lab API instance. You can override the API endpoint with `--base-url` to use staging or a self-hosted deployment of the same API.
+- the **Human Pattern Lab Content Repository** (source of truth)
+- the **Human Pattern Lab API** (runtime index and operations)
+
+Written content lives as Markdown in a dedicated content repository.  
+The API syncs and indexes that content so it can be rendered by user interfaces.
+
+By default, HPL targets a Human Pattern Lab API instance. You can override the API endpoint with `--base-url` to use staging or a self-hosted deployment of the same API.
 
 > Note: `--base-url` is intended for alternate deployments of the Human Pattern Lab API, not arbitrary third-party APIs.
 
@@ -63,17 +69,41 @@ Some API endpoints may require authentication depending on server configuration.
 npm install -g @thehumanpatternlab/hpl@alpha
 ```
 
-### Run a command
+### Sync Lab Notes from the content repository
 
 ```bash
-hpl notes sync --dir ./src/labnotes/en
+hpl notes sync --content-repo AdaInTheLab/the-human-pattern-lab-content
 ```
 
-For machine-readable output:
+This pulls structured Markdown content from the repository and synchronizes it into the Human Pattern Lab system.
+
+### Machine-readable output
 
 ```bash
 hpl --json notes sync
 ```
+
+---
+
+## Content Source Configuration (Optional)
+
+By default, `notes sync` expects a content repository with the following structure:
+
+```text
+labnotes/
+  en/
+    *.md
+  ko/
+    *.md
+```
+
+You may pin a default content repository using an environment variable:
+
+```bash
+export SKULK_CONTENT_REPO="AdaInTheLab/the-human-pattern-lab-content"
+```
+
+This allows `hpl notes sync` to run without explicitly passing `--content-repo`.
 
 ---
 
@@ -87,7 +117,8 @@ hpl <domain> <action> [options]
 
 - `hpl notes list`
 - `hpl notes get <slug>`
-- `hpl notes sync --dir <path>`
+- `hpl notes sync --content-repo <owner/name|url>`
+- `hpl notes sync --dir <path>` (advanced / local development)
 
 ### health
 
@@ -107,12 +138,31 @@ hpl version
 
 Structured output is treated as a **contract**, not a courtesy.
 
+When `--json` is provided:
+
+- stdout contains **only valid JSON**
+- stderr is used for logs and diagnostics
+- exit codes are deterministic
+
+A verification step is included:
+
 ```bash
 npm run json:check
 ```
 
-Fails if any non-JSON output appears on stdout.
+This command fails if any non-JSON output appears on stdout.
 
+---
+
+## What HPL Is Not
+
+HPL is not:
+- a chatbot interface
+- an agent framework
+- a memory system
+- an inference layer
+
+It is a command-line tool for interacting with Human Pattern Lab systems in a predictable, human-owned way.
 
 ---
 
