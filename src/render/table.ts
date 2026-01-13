@@ -10,6 +10,15 @@ export type Column<T> = {
   value: (row: T) => string;
 };
 
+export function safeLine(s: string): string {
+  return (s ?? "").replace(/\s+/g, " ").trim();
+}
+
+export function formatTags(tags: string[] | undefined): string {
+  const t = (tags ?? []).filter(Boolean);
+  return t.length ? t.join(", ") : "-";
+}
+
 function pad(s: string, width: number): string {
   const str = (s ?? "").toString();
   if (str.length >= width) return str.slice(0, Math.max(0, width - 1)) + "…";
@@ -22,3 +31,4 @@ export function renderTable<T>(rows: T[], cols: Column<T>[]): string {
   const body = rows.map((r) => cols.map((c) => pad(c.value(r), c.width)).join("  ")).join("\n");
   return [header, sep, body].filter(Boolean).join("\n");
 }
+

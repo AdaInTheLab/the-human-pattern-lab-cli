@@ -1,6 +1,6 @@
 {
   "name": "@thehumanpatternlab/hpl",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1-alpha.6",
   "description": "AI-forward, automation-safe SDK and CLI for the Human Pattern Lab",
   "type": "module",
   "license": "MIT",
@@ -37,10 +37,12 @@
     "start": "node ./dist/bin/hpl.js",
     "test": "vitest run",
     "test:watch": "vitest",
+    "json:check": "tsx ./bin/hpl.ts --json version | node -e \"JSON.parse(require('fs').readFileSync(0,'utf8'))\"",
     "lint": "node -e \"console.log('lint: add eslint when ready')\""
   },
   "dependencies": {
     "commander": "^12.1.0",
+    "execa": "^9.6.1",
     "gray-matter": "^4.0.3",
     "zod": "^3.24.1"
   },

@@ -37,16 +37,20 @@ function notesSyncCommand() {
       'Print what would be sent, but do not call the API',
       false,
     )
-    .action(async (opts) => {
-      const baseUrl = (0, config_js_1.SKULK_BASE_URL)(opts.baseUrl);
-      const token = (0, config_js_1.SKULK_TOKEN)();
+      .option("--content-repo <repo>", "GitHub owner/name or URL for Lab Notes content repo")
+      .option("--content-ref <ref>", "Branch, tag, or SHA (default: main)")
+      .option("--content-subdir <path>", "Subdirectory containing labnotes (default: labnotes)")
+      .option("--cache-dir <path>", "Local cache directory for content repos")
+      .action(async (opts) => {
+      const baseUrl = (0, config_js_1.HPL_BASE_URL)(opts.baseUrl);
+      const token = (0, config_js_1.HPL_TOKEN)();
       const files = (0, notes_js_1.listMarkdownFiles)(opts.dir);
       if (files.length === 0) {
         console.log(`No .md/.mdx files found in: ${opts.dir}`);
         process.exitCode = 1;
         return;
       }
-      console.log(`Skulk syncing ${files.length} note(s) from ${opts.dir}`);
+      console.log(`HPL syncing ${files.length} note(s) from ${opts.dir}`);
       console.log(`API: ${baseUrl}`);
       console.log(`Locale: ${opts.locale}`);
       console.log(
