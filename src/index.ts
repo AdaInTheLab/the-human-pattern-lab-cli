@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* ===========================================================
-   🦊 THE HUMAN PATTERN LAB — SKULK CLI
+   🦊 THE HUMAN PATTERN LAB — HPL CLI
    -----------------------------------------------------------
    File: notesSync.ts
    Role: Command Implementation
@@ -8,7 +8,7 @@
    Assistant: Lyric
    Status: Active
    Description:
-     Implements the `skulk notes sync` command.
+     Implements the `hpl notes sync` command.
      Handles human-readable and machine-readable output modes
      with enforced JSON purity for automation safety.
    -----------------------------------------------------------
@@ -20,15 +20,15 @@
    =========================================================== */
 
 import { Command } from "commander";
-import { notesSyncCommand } from "./commands/notesSync.js";
+import { notesSyncSubcommand } from "./commands/notes/notesSync.js";
 
 const program = new Command();
 
 program
-    .name("skulk")
-    .description("Skulk CLI for The Human Pattern Lab")
+    .name("hpl")
+    .description("Human Pattern Lab CLI (alpha)")
     .version("0.1.0")
-    .option("--json", "Output machine-readable JSON")
+    .option("--json", "Emit contract JSON only on stdout")
     .configureHelp({ helpWidth: 100 });
 
 const argv = process.argv.slice(2);
@@ -38,5 +38,7 @@ if (argv.length === 0) {
     process.exit(0);
 }
 
-program.addCommand(notesSyncCommand());
+// Mount domains
+program.addCommand(notesSyncSubcommand());
+
 program.parse(process.argv);

@@ -42,19 +42,19 @@ By default, HPL targets a Human Pattern Lab API instance. You can override the A
 
 ## Authentication
 
-HPL supports token-based authentication via the `SKULK_TOKEN` environment variable.
+HPL supports token-based authentication via the `HPL_TOKEN` environment variable.
 
 ```bash
-export SKULK_TOKEN="your-api-token"
+export HPL_TOKEN="your-api-token"
 ```
 
 (Optional) Override the API endpoint:
 
 ```bash
-export SKULK_BASE_URL="https://api.thehumanpatternlab.com"
+export HPL_BASE_URL="https://api.thehumanpatternlab.com"
 ```
 
-> `SKULK_BASE_URL` should point to the **root** of a Human Pattern Lab API deployment.  
+> `HPL_BASE_URL` should point to the **root** of a Human Pattern Lab API deployment.  
 > Do not include additional path segments.
 
 Some API endpoints may require authentication depending on server configuration.
@@ -100,7 +100,7 @@ labnotes/
 You may pin a default content repository using an environment variable:
 
 ```bash
-export SKULK_CONTENT_REPO="AdaInTheLab/the-human-pattern-lab-content"
+export HPL_CONTENT_REPO="AdaInTheLab/the-human-pattern-lab-content"
 ```
 
 This allows `hpl notes sync` to run without explicitly passing `--content-repo`.

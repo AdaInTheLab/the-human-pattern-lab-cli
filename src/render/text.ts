@@ -3,6 +3,8 @@
    -----------------------------------------------------------
    Purpose: Deterministic, dependency-free formatting for terminals.
    =========================================================== */
+import type { BaseEnvelope } from "../contract/envelope.js";
+import {formatTags, safeLine} from "./table";
 
 export function stripHtml(input: string): string {
   const s = (input || "");
@@ -36,12 +38,89 @@ export function stripHtml(input: string): string {
       .trim();
 }
 
+function renderError(env: any) {
+  console.error(`✖ ${env.command}`);
 
-export function safeLine(s: string): string {
-  return (s ?? "").replace(/\s+/g, " ").trim();
+  if (env.error?.message) {
+    console.error(safeLine(env.error.message));
+  }
+
+  if (env.error?.details) {
+    console.error();
+    console.error(stripHtml(String(env.error.details)));
+  }
 }
 
-export function formatTags(tags: string[] | undefined): string {
-  const t = (tags ?? []).filter(Boolean);
-  return t.length ? t.join(", ") : "-";
+function renderWarn(env: any) {
+  console.log(`⚠ ${env.command}`);
+
+  for (const w of env.warnings ?? []) {
+    console.log(`- ${safeLine(w)}`);
+  }
+
+  if (env.data !== undefined) {
+    console.log();
+    renderData(env.data);
+  }
+}
+
+function renderSuccess(env: any) {
+  renderData(env.data);
+}
+
+function renderData(data: any) {
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      renderItem(item);
+      console.log();
+    }
+    return;
+  }
+
+  if (typeof data === "object" && data !== null) {
+    renderItem(data);
+    return;
+  }
+
+  console.log(String(data));
+}
+
+function renderItem(note: any) {
+  if (note.title) {
+    console.log(safeLine(note.title));
+  }
+
+  if (note.subtitle) {
+    console.log(`  ${safeLine(note.subtitle)}`);
+  }
+
+  if (note.summary || note.excerpt) {
+    console.log();
+    console.log(stripHtml(note.summary ?? note.excerpt));
+  }
+
+  if (note.tags) {
+    console.log();
+    console.log(`Tags: ${formatTags(note.tags)}`);
+  }
+}
+
+export function renderText(envelope: BaseEnvelope) {
+  switch (envelope.status) {
+    case "error":
+      renderError(envelope);
+      return;
+
+    case "warn":
+      renderWarn(envelope);
+      return;
+
+    case "ok":
+      renderSuccess(envelope);
+      return;
+
+    default:
+      // Exhaustiveness guard
+      console.error("Unknown envelope status");
+  }
 }

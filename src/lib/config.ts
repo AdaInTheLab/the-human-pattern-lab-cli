@@ -4,22 +4,22 @@ import os from 'node:os';
 import { z } from 'zod';
 
 /**
- * Skulk CLI configuration schema
- * Stored in ~/.humanpatternlab/skulk.json
+ * HPL CLI configuration schema
+ * Stored in ~/.humanpatternlab/hpl.json
  */
 const ConfigSchema = z.object({
-  apiBaseUrl: z.string().url().default('https://thehumanpatternlab.com/api'),
+  apiBaseUrl: z.string().url().default('https://api.thehumanpatternlab.com'),
 
   token: z.string().optional(),
 });
 
-export type SkulkConfig = z.infer<typeof ConfigSchema>;
+export type HPLConfig = z.infer<typeof ConfigSchema>;
 
 function getConfigPath() {
-  return path.join(os.homedir(), '.humanpatternlab', 'skulk.json');
+  return path.join(os.homedir(), '.humanpatternlab', 'hpl.json');
 }
 
-export function loadConfig(): SkulkConfig {
+export function loadConfig(): HPLConfig {
   const p = getConfigPath();
 
   if (!fs.existsSync(p)) {
@@ -30,7 +30,7 @@ export function loadConfig(): SkulkConfig {
   return ConfigSchema.parse(JSON.parse(raw));
 }
 
-export function saveConfig(partial: Partial<SkulkConfig>) {
+export function saveConfig(partial: Partial<HPLConfig>) {
   const p = getConfigPath();
   fs.mkdirSync(path.dirname(p), { recursive: true });
 
@@ -40,11 +40,11 @@ export function saveConfig(partial: Partial<SkulkConfig>) {
   fs.writeFileSync(p, JSON.stringify(next, null, 2), 'utf-8');
 }
 
-export function SKULK_BASE_URL(override?: string) {
+export function HPL_BASE_URL(override?: string) {
   if (override?.trim()) return override.trim();
 
   // NEW official env var
-  const env = process.env.SKULK_BASE_URL?.trim();
+  const env = process.env.HPL_BASE_URL?.trim();
   if (env) return env;
 
   // optional legacy support (remove later if you want)
@@ -54,8 +54,8 @@ export function SKULK_BASE_URL(override?: string) {
   return loadConfig().apiBaseUrl;
 }
 
-export function SKULK_TOKEN() {
-  const env = process.env.SKULK_TOKEN?.trim();
+export function HPL_TOKEN() {
+  const env = process.env.HPL_TOKEN?.trim();
   if (env) return env;
 
   const legacy = process.env.HPL_TOKEN?.trim();
