@@ -37,6 +37,7 @@
     "start": "node ./dist/bin/hpl.js",
     "test": "vitest run",
     "test:watch": "vitest",
+    "json:check": "tsx ./bin/hpl.ts --json version | node -e \"JSON.parse(require('fs').readFileSync(0,'utf8'))\"",
     "lint": "node -e \"console.log('lint: add eslint when ready')\""
   },
   "dependencies": {
