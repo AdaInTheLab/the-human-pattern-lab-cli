@@ -56,6 +56,20 @@ export const INTENTS_ALPHA = {
     sideEffects: [],
     reversible: true,
   },
+  create_lab_note: {
+    intent: "create_lab_note",
+    intentVersion: "1",
+    scope: ["lab_notes", "remote_api"],
+    sideEffects: ["write_remote"],
+    reversible: false,
+  },
+  update_lab_note: {
+    intent: "update_lab_note",
+    intentVersion: "1",
+    scope: ["lab_notes", "remote_api"],
+    sideEffects: ["write_remote"],
+    reversible: false,
+  },
 } as const satisfies Record<string, IntentDescriptor>;
 
 export type AlphaIntentId = keyof typeof INTENTS_ALPHA;

@@ -1,6 +1,6 @@
 {
   "name": "@thehumanpatternlab/hpl",
-  "version": "0.0.1-alpha.6",
+  "version": "1.0.0",
   "description": "AI-forward, automation-safe SDK and CLI for the Human Pattern Lab",
   "type": "module",
   "license": "MIT",

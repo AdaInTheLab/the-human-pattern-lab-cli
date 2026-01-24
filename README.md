@@ -115,10 +115,19 @@ hpl <domain> <action> [options]
 
 ### notes
 
-- `hpl notes list`
-- `hpl notes get <slug>`
-- `hpl notes sync --content-repo <owner/name|url>`
-- `hpl notes sync --dir <path>` (advanced / local development)
+**Read operations:**
+- `hpl notes list` - List all published Lab Notes
+- `hpl notes get <slug>` - Get a specific Lab Note by slug
+
+**Write operations:** (requires `HPL_TOKEN`)
+- `hpl notes create --title "..." --slug "..." --file note.md` - Create a new Lab Note
+- `hpl notes update <slug> --title "..." --file note.md` - Update an existing Lab Note
+
+**Bulk operations:**
+- `hpl notes sync --content-repo <owner/name|url>` - Sync from content repository
+- `hpl notes sync --dir <path>` - Sync from local directory (advanced / local development)
+
+See [WRITE_OPERATIONS_GUIDE.md](./WRITE_OPERATIONS_GUIDE.md) for detailed write operations documentation.
 
 ### health
 

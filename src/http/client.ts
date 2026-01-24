@@ -42,3 +42,37 @@ export async function getJson<T>(path: string, signal?: AbortSignal): Promise<T>
   const payload = (await res.json()) as unknown;
   return unwrap<T>(payload);
 }
+
+export async function postJson<T>(
+  path: string,
+  body: unknown,
+  token?: string,
+  signal?: AbortSignal
+): Promise<T> {
+  const { apiBaseUrl } = getConfig();
+  const url = apiBaseUrl + path;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+    signal,
+  });
+
+  if (!res.ok) {
+    let responseBody = "";
+    try { responseBody = await res.text(); } catch { /* ignore */ }
+    throw new HttpError(`POST ${path} failed`, res.status, responseBody);
+  }
+
+  const payload = (await res.json()) as unknown;
+  return unwrap<T>(payload);
+}

@@ -119,14 +119,15 @@ export const LabNoteDetailSchema = LabNoteViewSchema.extend({
 export type LabNoteDetail = z.infer<typeof LabNoteDetailSchema>;
 
 /**
- * CLI → API payload for upsert (notes sync).
+ * CLI → API payload for upsert (notes sync and admin create/update).
+ * Uses content_markdown to match the API's field name.
  * Strict: our outbound contract.
  */
 export const LabNoteUpsertSchema = z
     .object({
       slug: z.string().min(1),
       title: z.string().min(1),
-      markdown: z.string().min(1),
+      content_markdown: z.string().min(1),
 
       locale: z.string().optional(),
 
