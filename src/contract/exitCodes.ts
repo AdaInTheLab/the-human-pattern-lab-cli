@@ -15,6 +15,8 @@ export const EXIT = {
   NOT_FOUND: 3,    // 404 semantics
   AUTH: 4,         // auth required / invalid token
   FORBIDDEN: 5,    // insufficient scope/permission
+  VALIDATION: 6,   // data validation failed
+  IO: 7,           // file I/O errors
   NETWORK: 10,     // DNS/timeout/unreachable
   SERVER: 11,      // 5xx or unexpected response
   CONTRACT: 12,    // schema mismatch / invalid JSON contract

@@ -51,7 +51,7 @@ async function upsertNote(
   const payload: LabNoteUpsertPayload = {
     slug: note.slug,
     title: note.attributes.title,
-    markdown: note.markdown,
+    content_markdown: note.markdown,
     locale,
     // Optional fields if your note parser provides them
     subtitle: note.attributes.subtitle,
@@ -71,7 +71,7 @@ async function upsertNote(
   return httpJson<UpsertResponse>(
       { baseUrl, token },
       "POST",
-      "/lab-notes/upsert",
+      "/admin/notes",
       parsed.data,
   );
 }

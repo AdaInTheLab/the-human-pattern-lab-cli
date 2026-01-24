@@ -24,6 +24,8 @@ import { Command } from "commander";
 import { notesListSubcommand } from "./list.js";
 import { notesGetSubcommand } from "./get.js";
 import { notesSyncSubcommand } from "./notesSync.js";
+import { notesCreateSubcommand } from "./create.js";
+import { notesUpdateSubcommand } from "./update.js";
 
 export function notesCommand() {
     const notes = new Command("notes").description("Lab Notes commands");
@@ -31,6 +33,8 @@ export function notesCommand() {
     // Subcommands
     notes.addCommand(notesListSubcommand());
     notes.addCommand(notesGetSubcommand());
+    notes.addCommand(notesCreateSubcommand());
+    notes.addCommand(notesUpdateSubcommand());
     notes.addCommand(notesSyncSubcommand());
 
     return notes;
