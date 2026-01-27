@@ -5,10 +5,10 @@
 import { Command } from "commander";
 import { writeHuman, writeJson } from "../io.js";
 import { z } from "zod";
-import { getAlphaIntent } from "../contract/intents";
-import { ok, err } from "../contract/envelope";
-import { EXIT } from "../contract/exitCodes";
-import { getJson, HttpError } from "../http/client";
+import { getAlphaIntent } from "../contract/intents.js";
+import { ok, err } from "../contract/envelope.js";
+import { EXIT } from "../contract/exitCodes.js";
+import { getJson, HttpError } from "../http/client.js";
 
 const HealthSchema = z.object({
   status: z.string(),

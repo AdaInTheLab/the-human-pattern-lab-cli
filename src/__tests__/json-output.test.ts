@@ -13,6 +13,13 @@ describe("CLI --json output contract", () => {
             }
         );
 
+        // Debug output
+        if (result.exitCode !== 0) {
+            console.log("Exit code:", result.exitCode);
+            console.log("stdout:", result.stdout);
+            console.log("stderr:", result.stderr);
+        }
+
         // 1. Process must succeed
         expect(result.exitCode).toBe(0);
 

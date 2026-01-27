@@ -6,7 +6,7 @@
      - Supports both raw API payloads and envelope form { ok: true, data: ... }.
    =========================================================== */
 
-import { getConfig } from "../config";
+import { getConfig } from "../config.js";
 
 export class HttpError extends Error {
   status?: number;
