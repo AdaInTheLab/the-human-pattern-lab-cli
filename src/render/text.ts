@@ -4,7 +4,7 @@
    Purpose: Deterministic, dependency-free formatting for terminals.
    =========================================================== */
 import type { BaseEnvelope } from "../contract/envelope.js";
-import {formatTags, safeLine} from "./table";
+import {formatTags, safeLine} from "./table.js";
 
 export function stripHtml(input: string): string {
   const s = (input || "");

@@ -5,9 +5,9 @@
 import { Command } from "commander";
 import { writeHuman, writeJson } from "../io.js";
 import { EXIT } from "../contract/exitCodes.js";
-import { getAlphaIntent } from "../contract/intents";
-import { ok } from "../contract/envelope";
-import { getCapabilitiesAlpha } from "../contract/capabilities";
+import { getAlphaIntent } from "../contract/intents.js";
+import { ok } from "../contract/envelope.js";
+import { getCapabilitiesAlpha } from "../contract/capabilities.js";
 
 type GlobalOpts = { json?: boolean };
 

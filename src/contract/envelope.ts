@@ -5,8 +5,8 @@
    Guarantee: When --json, stdout emits JSON only (no logs).
    =========================================================== */
 
-import type { IntentDescriptor } from "./intents";
-import { CLI_SCHEMA_VERSION, type ErrorPayload } from "./schema";
+import type { IntentDescriptor } from "./intents.js";
+import { CLI_SCHEMA_VERSION, type ErrorPayload } from "./schema.js";
 
 export type CommandStatus = "ok" | "warn" | "error";
 

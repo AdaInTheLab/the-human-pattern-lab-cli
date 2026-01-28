@@ -26,8 +26,8 @@ const program = new Command();
 
 program
     .name("hpl")
-    .description("Human Pattern Lab CLI (alpha)")
-    .version("0.1.0")
+    .description("Human Pattern Lab CLI")
+    .version("1.0.3")
     .option("--json", "Emit contract JSON only on stdout")
     .configureHelp({ helpWidth: 100 });
 

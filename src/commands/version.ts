@@ -5,14 +5,25 @@
 import { Command } from "commander";
 import { writeHuman, writeJson } from "../io.js";
 import { EXIT } from "../contract/exitCodes.js";
-import { createRequire } from "node:module";
-import { getAlphaIntent } from "../contract/intents";
-import { ok } from "../contract/envelope";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import { readFileSync, existsSync } from "fs";
+import { getAlphaIntent } from "../contract/intents.js";
+import { ok } from "../contract/envelope.js";
 
 type GlobalOpts = { json?: boolean }
 
-const require = createRequire(import.meta.url);
-const pkg = require("../../package.json") as { name: string; version: string };
+// Resolve package.json from current file location (works for both tsx and compiled)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Try source location first (tsx), then compiled location
+let pkgPath = join(__dirname, "../../package.json");
+if (!existsSync(pkgPath)) {
+  pkgPath = join(__dirname, "../../../package.json");
+}
+
+const pkg = JSON.parse(readFileSync(pkgPath, "utf-8")) as { name: string; version: string };
 
 export function versionCommand(): Command {
   return new Command("version")
